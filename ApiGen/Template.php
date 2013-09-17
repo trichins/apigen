@@ -101,7 +101,11 @@ class Template extends Nette\Templating\FileTemplate
 		// Docblock descriptions
 		$this->registerHelper('description', function($annotation, $context) use ($that) {
 			$description = trim(strpbrk($annotation, "\n\r\t $")) ?: $annotation;
-			return $that->doc($description, $context);
+			$block = false;
+			if (strpos($description, "\n") !== false) {
+				$block = true;
+			}
+			return $that->doc($description, $context, $block);
 		});
 		$this->registerHelper('shortDescription', function($element, $block = false) use ($that) {
 			return $that->doc($element->getShortDescription(), $element, $block);
